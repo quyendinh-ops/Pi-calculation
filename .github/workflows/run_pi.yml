@@ -1,0 +1,29 @@
+name: Execute Monte Carlo Pi Script
+
+# Trigger the script when you push code, or manually from the Actions tab
+on: 
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+# Including our Node 24 fix from earlier to keep things future-proof!
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  run-bash-script:
+    # GitHub boots up a clean Ubuntu Linux virtual machine
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Copy your code files from the repository onto the virtual machine
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    # Step 2: Give the virtual machine permission to execute the script
+    - name: Make script executable
+      run: chmod +x montecarlo_pi.sh
+
+    # Step 3: Run the bash script (passing 100,000 as the iteration argument!)
+    - name: Run Pi Calculator
+      run: ./montecarlo_pi.sh 100000
